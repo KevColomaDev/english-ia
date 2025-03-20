@@ -10,7 +10,7 @@ import {
 import { Server, Socket } from 'socket.io';
 
 import { ChatService } from './chat.service';
-import { ChatDto } from './dto/chat.dto';
+import { ChatDto } from './chat.dto';
 
 @WebSocketGateway({
   cors: {
