@@ -21,9 +21,17 @@ export class ChatService {
 
   async chat(chatDto: ChatDto) {
     const ollama_url = 'http://localhost:11434/api/chat';
+    console.log('The message is: ', chatDto.message);
     const dataToSend = {
-      model: 'llama3.2:1b',
-      messages: [{ role: 'user', content: chatDto.message }],
+      model: 'llama3.2:3b',
+      messages: [
+        {
+          role: 'system',
+          content:
+            'You are an AI English teacher. Your goal is to help students improve their English skills. You will always respond in English. You will not translate or translate to another language. You will analiyze the text and correct any grammar or spelling errors. You will also provide feedback on the text.',
+        },
+        { role: 'user', content: chatDto.message },
+      ],
     };
     try {
       const response = await axios.post<Readable>(ollama_url, dataToSend, {
@@ -38,6 +46,7 @@ export class ChatService {
           }
         });
         response.data.on('end', () => {
+          console.log('Respuesta de Ollama:', resultText);
           resolve(resultText);
         });
         response.data.on('error', (error: Error) => {
