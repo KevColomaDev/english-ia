@@ -5,6 +5,7 @@ import {
   WebSocketServer,
   OnGatewayConnection,
   OnGatewayDisconnect,
+  ConnectedSocket,
 } from '@nestjs/websockets';
 
 import { Server, Socket } from 'socket.io';
@@ -39,11 +40,14 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   // Escuchar mensajes desde el frontend
   @SubscribeMessage('sendMessage')
-  async handleMessage(@MessageBody() chatDto: ChatDto) {
+  async handleMessage(
+    @ConnectedSocket() client: Socket, // Ahora obtenemos correctamente el socket del cliente
+    @MessageBody() chatDto: ChatDto,
+  ) {
     const response = await this.chatService.chat(chatDto);
 
-    // Emitir el mensaje a todos los clientes conectados
-    this.server.emit('receiveMessage', { user: 'AI', message: response });
+    // Emitir el mensaje solo al cliente que lo envió
+    client.emit('receiveMessage', { user: 'AI', message: response });
 
     return response;
   }
