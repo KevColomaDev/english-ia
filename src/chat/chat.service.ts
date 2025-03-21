@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ChatDto } from './chat.dto';
+import { ChatDto } from './dto/chat.dto';
 import axios from 'axios';
 import { Readable } from 'stream';
 
