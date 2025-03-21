@@ -37,6 +37,9 @@ export class ChatService {
       ];
     }
 
+    // Mensaje que llega
+    console.log('Mensaje del usuario:', chatDto.message);
+
     // Agregar el mensaje del usuario al historial
     this.chatHistory[userId].push({ role: 'user', content: chatDto.message });
 
